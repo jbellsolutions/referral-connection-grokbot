@@ -1,5 +1,7 @@
 # Role charter: leads
 
+This role is its own GrokBot agent: Referral Connection Leads.
+
 ## Job
 
 Fills the directory one area at a time: finds local businesses in the launch area that have customers they can email, and drafts the outreach that gets them to sign up.
@@ -19,7 +21,7 @@ Fills the directory one area at a time: finds local businesses in the launch are
 
 ## Routines
 
-UTC (the bot's time zone). Created paused.
+UTC (this agent's time zone). Created paused, in this agent's own bot.
 
 | Routine | Cron |
 |---|---|
@@ -50,7 +52,7 @@ When a routine names this role, or Justin asks for this work:
 2. If this routine's line in context/routines-on.md is not `on` or `test`, log SKIPPED_OFF and end with [SILENT].
 3. Check every person with python3 repo/guards/scripts/suppression.py check "<who>" before drafting to them. Held means stop.
 4. Before sending, run python3 repo/guards/scripts/send_guard.py <type>. Not auto means it is a draft: put it in requests/justin/ and stop there. In test mode it is always a draft.
-5. Hand work to another role through requests/<role>/.
+5. Hand work to another agent through requests/<role>/.
 6. End with python3 repo/guards/scripts/beat.py write leads '<line>' found=N drafted=N sent=N, write daily/<date>/leads.md, and one line in log/runs-<YYYY-MM>.md.
 7. If nothing needs Justin, end with exactly [SILENT].
 

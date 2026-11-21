@@ -1,5 +1,7 @@
 # Role charter: lead
 
+This role is its own GrokBot agent: Referral Connection Lead.
+
 ## Job
 
 Plans the day, routes work, runs the watchdog, posts the scoreboard, writes the vault daily note, keeps Justin's queue.
@@ -19,7 +21,7 @@ The morning plan, the evening scoreboard (Slack and Notion), `vault/Daily/<date>
 
 ## Routines
 
-UTC (the bot's time zone). Created paused.
+UTC (this agent's time zone). Created paused, in this agent's own bot.
 
 | Routine | Cron |
 |---|---|

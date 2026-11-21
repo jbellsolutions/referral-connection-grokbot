@@ -1,10 +1,10 @@
-# Project charter: Referral Connection Bot
+# Project charter: The Referral Connection team
 
-The bot loads this page first. Where a role's charter and this page differ, this page wins.
+Every agent loads this page first. The team is four GrokBot agents, one per role (lead, seo, leads, sales), sharing one workspace. Where a role's charter and this page differ, this page wins.
 
 ## Purpose
 
-The Referral Connection is a directory site (findreferralpartners.com) where local businesses sign up to be connected for commission referral campaigns: "You send to my list. I send to yours." Each partner emails their own list about the other, once, and they pay each other commission on the sales. This bot does the three jobs that make the site a business: it gets the site found (SEO), it gets local businesses to sign up (leads), and it turns sign-ups into listings, matches and introduced pairs that run a campaign (sales). Done well looks like one area at a time filling with real listed businesses, each matched with a partner, and Justin seeing every number with its proof.
+The Referral Connection is a directory site (findreferralpartners.com) where local businesses sign up to be connected for commission referral campaigns: "You send to my list. I send to yours." Each partner emails their own list about the other, once, and they pay each other commission on the sales. The team does the three jobs that make the site a business: the seo agent gets the site found, the leads agent gets local businesses to sign up, and the sales agent turns sign-ups into listings, matches and introduced pairs that run a campaign (sales). Done well looks like one area at a time filling with real listed businesses, each matched with a partner, and Justin seeing every number with its proof.
 
 Justin's words, 2026-11-18: "They sign up to get connected to others in the area that want to do referral relationships that pay on commission. You send to my list, I send to your list... this is referral campaigns." And: "give it to GrokBot, and let GrokBot go promote the crap out of it."
 
@@ -63,7 +63,7 @@ Through files only: `daily/<date>/<role>.md` for what each role did, `requests/<
 
 | # | Milestone | Done when |
 |---|---|---|
-| K0 | Account and bot | Justin signed in, the bot has the pack and wrote `log/setup.md` |
+| K0 | Account and agents | Justin signed in, the four agents exist, each has the pack and its own role in memory, and `log/setup.md` is written |
 | K1 | Read-only | The site, Slack and Notion connected, each with one real record read back (`rc.py stats` for the site) |
 | K2 | Routines | Every routine created and paused, read back into `team-registry.md` |
 | K3 | Test day | The first-day run in HANDOFF.md passes with zero sends and zero publishes |

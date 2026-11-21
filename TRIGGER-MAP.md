@@ -1,6 +1,6 @@
 # Trigger map
 
-The loop is deterministic: schedules start every step, and the agent makes only the judgment call inside it. Gates stay on until replies prove good. Every cron is UTC. **50 routines max per bot**; `tools/check.py` counts the cron rows below. This bot uses 12.
+The loop is deterministic: schedules start every step, and the agent makes only the judgment call inside it. Gates stay on until replies prove good. Every cron is UTC. Each role is its own agent (its own GrokBot), and each agent creates only its own role's routines. **50 routines max per bot**; `tools/check.py` counts the cron rows below. The team uses 12, 3 per agent.
 
 ## The loop, step by step
 

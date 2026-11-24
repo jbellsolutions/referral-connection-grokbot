@@ -1,16 +1,21 @@
-# NEEDS-JUSTIN: The Referral Connection team
+# NEEDS-JUSTIN
 
-Only what Justin can do. Each line: what, the exact click or command, what it unblocks. Ticked off in order when he works the list.
+Everything only Justin can do for the referral site agent, in one list. The agent drafts everything else without any of it.
 
-| # | What | The exact step | What it unblocks |
+| # | What | The exact step | Unblocks |
 |---|---|---|---|
-| 1 | [ ] Grok account for The Referral Connection | Sign in at x.ai/bot with the account for this business ; check the plan includes four bots and their routines | Everything |
-| 2 | [ ] Create the four agents | Grok desktop app: four new bots, "Referral Connection Lead", "Referral Connection SEO", "Referral Connection Leads", "Referral Connection Sales", each on time zone UTC. Paste the message in HANDOFF.md Part 1 step 4 into the Lead; when it says Part 2A is done, paste the step 5 message into the other three | Setup |
-| 3 | [ ] Auto-review rules | Paste the Ask-first lines from GATES.md into Auto-review → Custom Rules | Safe routines |
-| 4 | [ ] Sign-ins | Slack, Notion, Email (the sender for member emails), Google Search Console, through Connect apps when an agent asks | Read-only checks |
-| 5 | [ ] Keys, by hidden prompt (names only) | `SLACK_BOT_TOKEN`, `NOTION_TOKEN`, `RC_ADMIN_KEY` (the site's admin key: it is the `ADMIN_KEY` variable on the site's Railway service) | The tools each role uses. `RC_SITE` is `https://findreferralpartners.com` |
-| 6 | [ ] Launch area | Tell the lead agent the first city or metro, and trades if any | Leads and the first matches |
-| 7 | [ ] Removals | Say whether the sales agent may apply a removal request itself (`rc.py remove <email>` deletes that member's records) or queues each one for you. The factory gate says an agent never deletes data; the site's privacy page promises removal | Removal requests being honoured |
-| 8 | [ ] Suppression list | Give the lead agent the file when it asks (never in the repo), or say there is none yet | Any draft to a person |
-| 9 | [ ] Single brain path | "Deploy key" (the lead agent pushes the daily note) or "Mac pulls" | Reports reach the single brain |
-| 10 | [ ] Approve each message type once | Reply yes to each draft type in Notion Drafts (`outreach-first`, `outreach-followup`, `reply`, `group-post`, `introduction`, `match-followup`, `guide`); say "auto" for a type once its replies look right | Sends and published guides |
+| 1 | [ ] Paste the line | Paste the line from INSTALL.md into the bot you chose for the site (or a new bot, if you want the site on its own) | The install |
+| 2 | [ ] Claude Code and Codex on that bot | Say "CLI status". If either is "not answering": for Claude Code run `claude setup-token` on your own computer and give the token at the hidden prompt (saved as `CLAUDE_CODE_OAUTH_TOKEN`), or sign in from the bot's terminal; for Codex run `codex login` in the bot's terminal | The jobs running on your subscriptions. Until then each job falls to the bot itself |
+| 3 | [ ] The site's admin key | By hidden prompt: `RC_ADMIN_KEY` (the `ADMIN_KEY` variable on the site's service) | Reading sign-ups, listings and matches. Until then the desk works on practice rows |
+| 4 | [ ] The agent writes the site's records | Read a day of `requests/justin/site-proposals-<date>.md`. Then say "referral-site: bot" and "crm-writes: on". For removal requests say "removals: apply" or leave them queued for you | Listings, matches and guide drafts on the site |
+| 5 | [ ] The message | Read `campaigns/referral-connection/MESSAGING.md`: a draft from the site's own words, with no research behind it. Say "use it", give your own, or "research it first" | Anything public |
+| 6 | [ ] The launch area and a sender | Name the first city or metro, and the address introductions and outreach go from | Outreach and introductions for a real area |
+| 7 | [ ] The opt-out list and the never-touch list | Give the same opt-out file that bot's other work uses, and the names of computers, agents and accounts the agent must never use | Any draft addressed to a person; any write to the site |
+| 8 | [ ] Slack and Notion | Name the channel and the page the nightly report goes to | The report |
+| 9 | [ ] The site's pages | Say "yes, change the site" in the site's own chat, so its pages and form cover collaborations, partnerships, sponsorships and deals, not only commission referral campaigns | The site matching what the agent says |
+| 10 | [ ] Skool and Whop | Name any community to read, and sign the bot's browser in to it | Public asks past public pages |
+| 11 | [ ] Search | Verify the site in Google Search Console and Bing | The Tuesday read against real search numbers |
+
+## The switches that make it run without you
+
+After you have seen a type's drafts, say "<type>: auto": `rc_introduction`, `rc_match_followup`, `rc_outreach_first`, `rc_outreach_followup`, `rc_reply`, `rc_group_post`, `rc_guide`. Say "<routine>: on" to take a routine off test. These stay yours whatever is on: the site's code and pages, a price or a fee, terms between two owners, anyone upset.

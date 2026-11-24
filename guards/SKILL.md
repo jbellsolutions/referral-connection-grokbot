@@ -17,3 +17,4 @@ These are code, not advice. Run them; don't reason around them. Paths are relati
 | Watchdog | `python3 repo/guards/scripts/beat.py status --hours 26` | `SILENT <role>` lines to alarm on |
 
 Never print the suppression list, read `.secrets/`, or edit a guard or a switch file to get past it.
+| Write to a live system | `python3 repo/guards/scripts/owner_guard.py check <system> --routine "<NAME>"` | `bot`, `live` or `stopped`. Anything but `bot` means read and draft only; the live system keeps the writes |

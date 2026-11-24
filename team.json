@@ -1,0 +1,77 @@
+{
+ "_doc": "The Referral Connection site agent: one job-running agent for findreferralpartners.com, added to a Grok bot that already exists or run as its own bot. Each routine hands one job (jobs/<job>.md) to the Claude Code CLI through tools/job.py. tools/team.py, tools/install.py and tools/check.py read this.",
+ "name": "the Referral Connection site agent",
+ "workspace": "/workspace/referral-connection",
+ "link": "https://github.com/jbellsolutions/referral-connection-grokbot/releases/latest/download/referral-connection.zip",
+ "campaigns": [
+  "referral-connection"
+ ],
+ "secrets": "site.env",
+ "memory": "add",
+ "owners": [
+  "referral-site",
+  "cold-email-sender",
+  "social-sender"
+ ],
+ "switches": [
+  "crm-writes: off",
+  "removals: queue"
+ ],
+ "folders": [
+  "context",
+  "daily",
+  "log/jobs",
+  "state/lead-radar",
+  "content/drafts",
+  "vault/Daily",
+  "vault/People",
+  "requests/justin",
+  "requests/desk",
+  "requests/growth",
+  "requests/guides"
+ ],
+ "private_folders": [
+  "data",
+  "data/referral",
+  "data/communities",
+  "context/referral",
+  ".secrets"
+ ],
+ "checks": [],
+ "first_job": "referral-report",
+ "env": {
+  "RC_SITE": "https://findreferralpartners.com"
+ },
+ "skill_name": "referral-site-cli",
+ "agents": [
+  {
+   "role": "referral-connection",
+   "bot": "Referral Connection",
+   "kind": "main",
+   "campaign": "referral-connection",
+   "does": "Everything about the referral site: sign-ups, listings, matches and introductions; filling the launch area; guides and the site check; the nightly numbers",
+   "routines": [
+    [
+     "Referral desk",
+     "20 13,20 * * *",
+     "Run python3 /workspace/referral-connection/repo/tools/job.py run referral-desk"
+    ],
+    [
+     "Referral guides",
+     "20 14 * * 2,5",
+     "Run python3 /workspace/referral-connection/repo/tools/job.py run referral-guides"
+    ],
+    [
+     "Referral growth",
+     "20 15 * * 1-5",
+     "First save today's new posts from any signed-in Skool or Whop community in /workspace/referral-connection/context/communities.md to /workspace/referral-connection/data/communities/<date>/<name>.txt with your browser. Then run python3 /workspace/referral-connection/repo/tools/job.py run referral-growth"
+    ],
+    [
+     "Referral report",
+     "50 23 * * *",
+     "Run python3 /workspace/referral-connection/repo/tools/job.py run referral-report. Then post /workspace/referral-connection/daily/<date>/report.md, as it is, to Slack and to the Notion hub"
+    ]
+   ]
+  }
+ ]
+}

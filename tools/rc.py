@@ -2,7 +2,12 @@
 """Operator CLI for the site's admin API. Standard library only.
 
 Needs RC_SITE (e.g. https://findreferralpartners.com) and RC_ADMIN_KEY, from the environment or from
-.secrets/site.env in the bot's workspace (KEY=value lines).
+.secrets/site.env in the agent's workspace (KEY=value lines).
+
+Reads are free. A write goes to the site only when context/owners.md says `referral-site: bot` and
+context/routines-on.md says `crm-writes: on` (and there is no context/STOP). `remove` also needs `removals: apply`,
+and `page-put --publish` also needs `rc_guide: auto` in context/standing-approvals.md. Otherwise the write is not
+made: the exact command is added to requests/justin/site-proposals-<date>.md and PROPOSED is printed.
 
   rc.py stats
   rc.py signups [--status new] [--area austin] [--since 2026-11-18T00:00:00Z] [--csv FILE]
@@ -14,10 +19,56 @@ Needs RC_SITE (e.g. https://findreferralpartners.com) and RC_ADMIN_KEY, from the
   rc.py matches | match <signup a> <signup b> [--notes T] | match-set <id> [--status S] [--notes T]
   rc.py pages | page-get <slug> | page-put <slug> --title T --description D --html FILE [--publish] | page-delete <slug>
 """
-import argparse, json, os, sys, urllib.error, urllib.parse, urllib.request
+import argparse, datetime, json, os, re, subprocess, sys, urllib.error, urllib.parse, urllib.request
+
+
+REPO = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
+WS = os.environ.get("BOT_HOME") or (os.path.dirname(REPO) if os.path.basename(REPO) == "repo" else REPO)
+
+
+def _line(name, key):
+    f = os.path.join(WS, "context", name)
+    for l in open(f, errors="ignore").read().splitlines() if os.path.exists(f) else []:
+        if re.match(rf"\s*{re.escape(key)}\s*:", l, re.I):
+            return l.split(":", 1)[1].strip().lower()
+    return ""
+
+
+def held(method, path, body):
+    """Why this write may not be made, or "" if it may."""
+    if os.path.exists(os.path.join(WS, "context", "STOP")):
+        return "context/STOP exists"
+    r = subprocess.run([sys.executable, os.path.join(REPO, "guards", "scripts", "owner_guard.py"), "check", "referral-site"],
+                       capture_output=True, text=True, env=dict(os.environ, BOT_HOME=WS))
+    if r.returncode != 0:
+        return "owner guard says " + (r.stdout.strip().splitlines() or ["?"])[-1]
+    if _line("routines-on.md", "crm-writes") != "on":
+        return "crm-writes is not on"
+    if path == "/remove" and _line("routines-on.md", "removals") != "apply":
+        return "removals are queued for Justin"
+    if path.startswith("/pages/") and method == "PUT" and (body or {}).get("published") and "auto" not in _line("standing-approvals.md", "rc_guide"):
+        return "rc_guide is not auto, so a guide is saved as a draft only: run it again without --publish"
+    return ""
+
+
+def propose(why):
+    d = os.path.join(WS, "requests", "justin")
+    os.makedirs(d, exist_ok=True)
+    f = os.path.join(d, f"site-proposals-{datetime.datetime.now(datetime.timezone.utc):%Y-%m-%d}.md")
+    new = not os.path.exists(f)
+    with open(f, "a") as h:
+        if new:
+            h.write("# Site writes the agent would have made\n\nNot written, because a switch is off. Each line is the exact command.\n\n")
+        h.write("- `python3 repo/tools/rc.py " + " ".join(a if re.fullmatch(r"[\w@.:/,+-]+", a) else json.dumps(a) for a in sys.argv[1:]) + f"`  ({why})\n")
+    print(f"PROPOSED, not written ({why}): {f}")
+    sys.exit(0)
 
 
 def call(method, path, body=None, raw=False):
+    if method != "GET":
+        why = held(method, path, body)
+        if why:
+            propose(why)
     here = os.path.dirname(os.path.abspath(__file__))
     for f in (os.path.join(os.getcwd(), ".secrets", "site.env"), os.path.join(here, "..", "..", ".secrets", "site.env"), os.path.join(here, "..", ".env.local")):
         if os.path.exists(f):  # KEY=value lines; the environment wins
